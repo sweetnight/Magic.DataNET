@@ -102,13 +102,13 @@ namespace Magic.DataNET
                     command.ExecuteNonQuery();
                 }
 
-                queryResult.state = true;
-                queryResult.message = QueryResultSuccess;
+                queryResult.State = true;
+                queryResult.Message = QueryResultSuccess;
             }
             catch (Exception ex)
             {
-                queryResult.state = false;
-                queryResult.message = QueryResultFail + $" Exception: {ex.Message}";
+                queryResult.State = false;
+                queryResult.Message = QueryResultFail + $" Exception: {ex.Message}";
 
                 Debug.WriteLine(ex.Message);
             }
@@ -156,7 +156,7 @@ namespace Magic.DataNET
             }
             catch (Exception ex)
             {
-                readQueryResult.Data = null;
+                readQueryResult.Data = new DataTable();
                 readQueryResult.Count = 0;
                 readQueryResult.State = false;
                 readQueryResult.Message = ex.Message;
@@ -192,7 +192,7 @@ namespace Magic.DataNET
             }
             catch (Exception ex)
             {
-                readQueryResult.Data = null;
+                readQueryResult.Data = new DataTable();
                 readQueryResult.Count = 0;
                 readQueryResult.State = false;
                 readQueryResult.Message = ex.Message;
@@ -216,7 +216,7 @@ namespace Magic.DataNET
                     scalarQueryResult.Data = result;
                     scalarQueryResult.State = true;
 
-                    if (result == null)
+                    if (scalarQueryResult.Data == null)
                     {
                         scalarQueryResult.Message = "No data returned by query";
                     }
@@ -266,7 +266,7 @@ namespace Magic.DataNET
             }
             catch (Exception ex)
             {
-                readQueryResult.Data = null;
+                readQueryResult.Data = new DataTable();
                 readQueryResult.Count = 0;
                 readQueryResult.State = false;
                 readQueryResult.Message = $"Failed when querying. Exception: {ex.Message}";
@@ -414,13 +414,13 @@ namespace Magic.DataNET
 
         public class QueryResult
         {
-            public bool state { get; set; } = false;
-            public string message { get; set; } = string.Empty;
+            public bool State { get; set; } = false;
+            public string Message { get; set; } = string.Empty;
         } // end of class
 
         public class ReadQueryResult
         {
-            public DataTable? Data { get; set; } = new DataTable();
+            public DataTable Data { get; set; } = new DataTable();
             public int Count { get; set; } = 0;
             public bool State { get; set; } = false;
             public string Message { get; set; } = string.Empty;

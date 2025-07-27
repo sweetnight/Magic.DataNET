@@ -46,12 +46,25 @@ namespace Magic.DataNET
         public string? get_option(string option_name, string? default_value = null)
         {
 
-            if (option_name == "")
+            if (string.IsNullOrWhiteSpace(option_name))
             {
-                return "null";
+                return null;
             }
 
-            string query = "SELECT option_value FROM options WHERE option_name LIKE '" + option_name + "' ORDER BY option_id ASC LIMIT 1";
+            string query = $@"
+                SELECT COUNT(*) 
+                    FROM options 
+                    WHERE option_name = '{option_name}'
+            ";
+
+            SQLite.ScalarQueryResult scalarQueryResult = SQLite.ScalarQuery(query);
+
+            if(scalarQueryResult.Data == null)
+            {
+                return default_value;
+            }
+
+            query = $"SELECT option_value FROM options WHERE option_name LIKE '{option_name}' ORDER BY option_id ASC LIMIT 1";
             SQLite.ReadQueryResult queryResult = SQLite.ReadQuery(query);
 
             if (queryResult.Data == null || queryResult.Data.Rows.Count == 0) return default_value;
