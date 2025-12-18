@@ -150,6 +150,30 @@ namespace Magic.DataNET
 
         } // end of method
 
+        public string? get_option_encryption_v2(string option_name, string? default_value = null)
+        {
+            if (string.IsNullOrEmpty(option_name))
+            {
+                return null;
+            }
+
+            string? encryptionKey = get_option("key");
+            string option_name_encrypted = Encryption.Encrypt(option_name, encryptionKey == null ? string.Empty : encryptionKey);
+
+            string query = "SELECT option_value FROM options WHERE option_name LIKE '" + option_name_encrypted + "' ORDER BY option_id ASC LIMIT 1";
+            SQLite.ReadQueryResult reader = SQLite.ReadQuery(query);
+
+            if (reader.Data == null || reader.Data.Rows.Count == 0)
+            {
+                return default_value;
+            }
+
+            string? option_value_encrypted = reader.Data.Rows[0].Field<string>("option_value");
+
+            return Encryption.Decrypt(option_value_encrypted == null ? string.Empty : option_value_encrypted, encryptionKey == null ? string.Empty : encryptionKey);
+
+        } // end of method
+
         public string update_option_encryption(string option_name, string option_value)
         {
             if (option_name == "")
