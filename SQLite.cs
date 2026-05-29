@@ -25,7 +25,7 @@ namespace Magic.DataNET
         #endregion
 
         #region METHODS
-        public CreateDatabaseFileResult OpenDatabaseFile(string dbFileName)
+        public CreateDatabaseFileResult OpenOrCreateDatabaseFile(string dbFileName)
         {
             CreateDatabaseFileResult createDatabaseFileResult = new CreateDatabaseFileResult();
 
